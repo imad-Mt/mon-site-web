@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Dashboard with Charts</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Include Chart.js library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="dashboard-container">
@@ -15,7 +17,7 @@
         <aside class="sidebar">
             <nav>
                 <ul>
-                    <li><a href="#">Overview</a></li>
+                    <li><a href="#" class="active">Overview</a></li>
                     <li><a href="#">Analytics</a></li>
                     <li><a href="#">Reports</a></li>
                     <li><a href="#">Settings</a></li>
@@ -28,24 +30,224 @@
                 <div class="card">
                     <h3>Total Users</h3>
                     <p>1,234</p>
+                    <div class="chart-container small">
+                        <canvas id="userGrowthChart"></canvas>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Revenue</h3>
-                    <p>5,678dh</p>
+                    <p>$5,678</p>
+                    <div class="chart-container small">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
                 </div>
                 <div class="card">
                     <h3>Tasks</h3>
                     <p>24/50</p>
+                    <div class="chart-container small">
+                        <canvas id="tasksChart"></canvas>
+                    </div>
                 </div>
             </section>
             
             <section class="main-chart">
                 <h2>Performance Overview</h2>
-                <div class="chart-placeholder">
-                    <!-- Chart would go here -->
+                <div class="chart-container">
+                    <canvas id="performanceChart"></canvas>
+                </div>
+            </section>
+
+            <section class="chart-row">
+                <div class="chart-card">
+                    <h3>Monthly Sales</h3>
+                    <div class="chart-container">
+                        <canvas id="monthlySalesChart"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Traffic Sources</h3>
+                    <div class="chart-container">
+                        <canvas id="trafficChart"></canvas>
+                    </div>
                 </div>
             </section>
         </main>
     </div>
+
+    <script>
+        // Initialize all charts when the page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // User Growth Line Chart (small)
+            new Chart(document.getElementById('userGrowthChart'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    datasets: [{
+                        label: 'New Users',
+                        data: [120, 190, 170, 220, 300],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
+                    }
+                }
+            });
+
+            // Revenue Bar Chart (small)
+            new Chart(document.getElementById('revenueChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Q1', 'Q2', 'Q3', 'Q4'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: [1200, 1900, 1500, 2000],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { display: false },
+                        x: { display: false }
+                    }
+                }
+            });
+
+            // Tasks Doughnut Chart (small)
+            new Chart(document.getElementById('tasksChart'), {
+                type: 'doughnut',
+                data: {
+                    labels: ['Completed', 'Pending', 'Overdue'],
+                    datasets: [{
+                        data: [24, 15, 11],
+                        backgroundColor: [
+                            'rgba(75, 192, 192, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(255, 99, 132, 0.7)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Main Performance Line Chart
+            new Chart(document.getElementById('performanceChart'), {
+                type: 'line',
+                data: {
+                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [65, 59, 80, 81, 56, 55, 40],
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true
+                    }, {
+                        label: 'Visitors',
+                        data: [28, 48, 40, 19, 86, 27, 90],
+                        borderColor: 'rgba(153, 102, 255, 1)',
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        title: {
+                            display: false
+                        },
+                        legend: {
+                            position: 'top'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Monthly Sales Bar Chart
+            new Chart(document.getElementById('monthlySalesChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Sales',
+                        data: [12, 19, 3, 5, 2, 3],
+                        backgroundColor: 'rgba(54, 162, 235, 0.7)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Traffic Sources Pie Chart
+            new Chart(document.getElementById('trafficChart'), {
+                type: 'pie',
+                data: {
+                    labels: ['Direct', 'Social', 'Referral', 'Organic'],
+                    datasets: [{
+                        data: [300, 150, 100, 200],
+                        backgroundColor: [
+                            'rgba(255, 99, 132, 0.7)',
+                            'rgba(54, 162, 235, 0.7)',
+                            'rgba(255, 206, 86, 0.7)',
+                            'rgba(75, 192, 192, 0.7)'
+                        ],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+        });
+    </script>
 </body>
 </html>
